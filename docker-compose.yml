@@ -1,0 +1,112 @@
+version: "3.4"
+ 
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.0
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+ 
+  elasticsearch2:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.0
+    ports:
+      - '9201:9200'
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata2:/usr/share/elasticsearch/data
+ 
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.6.0
+    ports:
+      - '5601:5601'
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+ 
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:6.6.0
+  #   ports:
+  #     - '9600:9600'
+  #   volumes:
+  #     - lsdata:/usr/share/logstash/data
+  #     - ./logstash/conf/logstash.yml:/usr/share/logstash/config/logstash.yml
+  #     - ./logstash/pipeline:/usr/share/logstash/pipeline
+  #     - ./logstash/lib/mysql-connector-java-5.1.42-bin.jar:/home/logstash/mysql-connector-java-5.1.42-bin.jar
+  #     - ../access.log:/home/logstash/access.log
+  #   depends_on:
+  #     - elasticsearch
+  #     - mysql
+ 
+  # filebeat:
+  #   image: docker.elastic.co/beats/filebeat:6.6.0
+  #   volumes:
+  #     - fbdata:/usr/share/filebeat/data
+  #     - ./filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml
+  #     - ./filebeat/apache2.yml:/usr/share/filebeat/modules.d/apache2.yml
+  #     - ../access.log:/home/filebeat/access.log
+  #   depends_on:
+  #     - elasticsearch
+ 
+  mysql:
+    image: mysql
+    restart: always
+    volumes:
+      - mysqldata:/var/lib/mysql
+      - ./mysql/scripts/01.load_movielens.sql:/docker-entrypoint-initdb.d/01.load_movielens.sql
+      - ../ml-100k:/home/mysql/ml-100k
+    secrets:
+      - mysql_pass
+    environment:
+      - MYSQL_DATABASE=movielens
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mysql_pass
+ 
+  # spark:
+  #   image: gettyimages/spark:2.2.1-hadoop-2.7
+  #   ports:
+  #     - '4040:4040'
+  #     - '8080:8080'
+  #   volumes:
+  #     - sparkdata:/root/.ivy2
+  #     - ./spark/fake_friends.scala:/home/spark/fake_friends.scala
+  #     - ../fakefriends.csv:/home/spark/fake_friends.csv
+  #     - ./spark/ratings.scala:/home/spark/ratings.scala
+  #     - ../ml-latest-small/ratings.csv:/home/spark/ratings.csv
+  #   depends_on:
+  #     - elasticsearch
+ 
+volumes:
+  esdata1:
+    driver: local
+  esdata2:
+    driver: local
+  lsdata:
+    driver: local
+  # fbdata:
+  #   driver: local
+  mysqldata:
+    driver: local
+  # sparkdata:
+  #   driver: local
+ 
+secrets:
+  mysql_pass:
+    file: ./mysql/mysql_password.txt 
