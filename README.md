@@ -1,5 +1,8 @@
 ### Setup
 
+- Have docker and docker-compose set up
+- Have a docker hub account
+
 ```
 $ docker-compose up
 $ curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9200/shakespeare --data-binary @shakes-mapping.json
