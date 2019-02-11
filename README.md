@@ -13,7 +13,8 @@ $ `curl -H "Content-Type: application/json" -XGET 'localhost:9200/shakespeare/_s
             "text_entry": "to be or not to be"
         }
     }
-}'`
+}'
+```
 
 ### Expected
 
@@ -48,4 +49,3 @@ $ `curl -H "Content-Type: application/json" -XGET 'localhost:9200/shakespeare/_s
 ### Verify it took
 
 ```$ curl -H "Content-Type: application/json" -XGET 127.0.0.1:9200/movies/_mapping/movie```
-
