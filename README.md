@@ -2,7 +2,7 @@ $ `docker-compose up`
 
 ## Shakespeare Dataset
 
-```
+```sh
 $ wget http://media.sundog-soft.com/es6/shakes-mapping.json
 $ curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9200/shakespeare --data-binary @shakes-mapping.json
 $ wget http://media.sundog-soft.com/es6/shakespeare_6.0.json
@@ -19,8 +19,7 @@ $ curl -H "Content-Type: application/json" -XGET 'localhost:9200/shakespeare/_se
 
 ### Expected
 
-```
-...
+```json
 "hits" : [
       {
         "_index" : "shakespeare",
@@ -43,13 +42,13 @@ $ curl -H "Content-Type: application/json" -XGET 'localhost:9200/shakespeare/_se
 
 ### Add mapping
 
-```
+```sh
 $ curl -H "Content-TYpe: application/json" -XPUT 127.0.0.1:9200/movies -d '{"mappings":{"movie":{"properties":{"year":{"type": "date"}}}}}'
 ```
 
 ### Verify it took
 
-```
+```sh
 $ curl -H "Content-Type: application/json" -XGET 127.0.0.1:9200/movies/_mapping/movie
 ```
 
@@ -57,13 +56,13 @@ $ curl -H "Content-Type: application/json" -XGET 127.0.0.1:9200/movies/_mapping/
 
 Using the escurl hack in bin
 
-```
+```sh
 bin/escurl -XPUT 127.0.0.1:9200/movies/movie/109487 -d '
 quote> {"genre": ["IMAX","Sci-Fi"],"title":"Interstellar","year":2014}'
 ```
 ### Get all the movies (just one for now)
 
-```
+```sh
 bin/escurl -XGET "127.0.0.1:9200/movies/movie/_search?pretty"
 ```
 
