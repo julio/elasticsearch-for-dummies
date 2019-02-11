@@ -69,7 +69,7 @@ bin/escurl -XGET "127.0.0.1:9200/movies/movie/_search?pretty"
 
 ### Expected
 
-```
+```json
 {
   "took" : 24,
   "timed_out" : false,
