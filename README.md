@@ -44,13 +44,60 @@ $ curl -H "Content-Type: application/json" -XGET 'localhost:9200/shakespeare/_se
 ### Add mapping
 
 ```
-$ curl -H "Content-TYpe: application/json" -XPUT 127.0.0.1:9200/movies -d '
-  {"mappings":{"movie":{"properties":{"year":{"type": "date"}}}}}
-'
+$ curl -H "Content-TYpe: application/json" -XPUT 127.0.0.1:9200/movies -d '{"mappings":{"movie":{"properties":{"year":{"type": "date"}}}}}'
 ```
 
 ### Verify it took
 
 ```
 $ curl -H "Content-Type: application/json" -XGET 127.0.0.1:9200/movies/_mapping/movie
+```
+
+### Insert a single movie
+
+Using the escurl hack in bin
+
+```
+bin/escurl -XPUT 127.0.0.1:9200/movies/movie/109487 -d '
+quote> {"genre": ["IMAX","Sci-Fi"],"title":"Interstellar","year":2014}'
+```
+### Get all the movies (just one for now)
+
+```
+bin/escurl -XGET "127.0.0.1:9200/movies/movie/_search?pretty"
+```
+
+### Expected
+
+```
+{
+  "took" : 24,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 5,
+    "successful" : 5,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 1,
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "movies",
+        "_type" : "movie",
+        "_id" : "109487",
+        "_score" : 1.0,
+        "_source" : {
+          "genre" : [
+            "IMAX",
+            "Sci-Fi"
+          ],
+          "title" : "Interstellar",
+          "year" : 2014
+        }
+      }
+    ]
+  }
+}
 ```
