@@ -100,3 +100,14 @@ bin/escurl -XGET "127.0.0.1:9200/movies/movie/_search?pretty"
   }
 }
 ```
+
+### Insert many movies
+
+```sh
+bin/escurl -XPUT "127.0.0.1:9200/_bulk?pretty" --data-binary @datasets/movies/movies.json
+```
+### Verify that inserting many movies worked
+
+```sh
+bin/escurl -XGET "127.0.0.1:9200/movies/_search?pretty"
+```
