@@ -1,3 +1,2 @@
-genome-scores
-genome-scores.csv
-ratings.csv
+datasets/movies/large/genome-scores.csv
+datasets/movies/large/ratings.csv
