@@ -117,3 +117,22 @@ bin/escurl -XPUT "127.0.0.1:9200/_bulk?pretty" --data-binary @datasets/movies/mo
 ```sh
 bin/escurl -XGET "127.0.0.1:9200/movies/_search?pretty"
 ```
+### Ruby
+
+## Install gem
+
+```sh
+gem install elasticsearch
+```
+
+## Quick test
+
+```ruby
+require 'elasticsearch'
+
+client = Elasticsearch::Client.new url: 'http://localhost:9200', log: true
+
+client.transport.reload_connections!
+client.cluster.health
+client.search q: 'Interstellar'
+```
