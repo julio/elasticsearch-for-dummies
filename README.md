@@ -64,7 +64,7 @@ Using the `escurl` hack in bin
 
 ```sh
 bin/escurl -XPUT 127.0.0.1:9200/movies/movie/109487 -d '
-quote> {"genre": ["IMAX","Sci-Fi"],"title":"Interstellar","year":2014}'
+{"genre": ["IMAX","Sci-Fi"],"title":"Interstellar","year":2014}'
 ```
 #### Get all the movies (just one for now)
 
