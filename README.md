@@ -1,6 +1,12 @@
+## Start
+
 $ `docker-compose up`
 
-## Shakespeare Dataset
+## Datasets
+
+### Shakespeare Dataset
+
+#### Load
 
 ```sh
 $ wget http://media.sundog-soft.com/es6/shakes-mapping.json
@@ -17,7 +23,7 @@ $ curl -H "Content-Type: application/json" -XGET 'localhost:9200/shakespeare/_se
 }'
 ```
 
-### Expected
+#### Expected
 
 ```json
 "hits" : [
@@ -38,35 +44,35 @@ $ curl -H "Content-Type: application/json" -XGET 'localhost:9200/shakespeare/_se
       }
 ```
 
-## Movies dataset
+### Movies dataset
 
-### Add mapping
+#### Add mapping
 
 ```sh
 $ curl -H "Content-TYpe: application/json" -XPUT 127.0.0.1:9200/movies -d '{"mappings":{"movie":{"properties":{"year":{"type": "date"}}}}}'
 ```
 
-### Verify it took
+#### Verify it took
 
 ```sh
 $ curl -H "Content-Type: application/json" -XGET 127.0.0.1:9200/movies/_mapping/movie
 ```
 
-### Insert a single movie
+#### Insert a single movie
 
-Using the escurl hack in bin
+Using the `escurl` hack in bin
 
 ```sh
 bin/escurl -XPUT 127.0.0.1:9200/movies/movie/109487 -d '
 quote> {"genre": ["IMAX","Sci-Fi"],"title":"Interstellar","year":2014}'
 ```
-### Get all the movies (just one for now)
+#### Get all the movies (just one for now)
 
 ```sh
 bin/escurl -XGET "127.0.0.1:9200/movies/movie/_search?pretty"
 ```
 
-### Expected
+#### Expected
 
 ```json
 {
@@ -101,12 +107,12 @@ bin/escurl -XGET "127.0.0.1:9200/movies/movie/_search?pretty"
 }
 ```
 
-### Insert many movies
+#### Insert many movies
 
 ```sh
 bin/escurl -XPUT "127.0.0.1:9200/_bulk?pretty" --data-binary @datasets/movies/movies.json
 ```
-### Verify that inserting many movies worked
+#### Verify that inserting many movies worked
 
 ```sh
 bin/escurl -XGET "127.0.0.1:9200/movies/_search?pretty"
