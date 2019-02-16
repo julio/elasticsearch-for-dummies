@@ -100,12 +100,12 @@ volumes:
     driver: local
   lsdata:
     driver: local
-  # fbdata:
-  #   driver: local
+  fbdata:
+    driver: local
   mysqldata:
     driver: local
-  # sparkdata:
-  #   driver: local
+  sparkdata:
+    driver: local
  
 secrets:
   mysql_pass:
